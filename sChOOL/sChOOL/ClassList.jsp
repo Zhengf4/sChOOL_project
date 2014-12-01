@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Beans.UserBean"%>
+<% UserBean userBean = (UserBean)(request.getSession().getAttribute("facultySessionUser"));%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +14,7 @@
         <title>JSP Page</title>
     </head>
     <body>
+
 	<h2>Class List: </h2>
 		<p><a href="StudentList.jsp" target="Studentframe"><ul><li>Grade 1 - Science</li></ul></a></p>
    

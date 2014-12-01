@@ -12,6 +12,7 @@ package Beans;
 
 public class UserBean {
     private String userId;
+    private String name;
     private String password;
     private String profession;
     private String announcement;
@@ -80,6 +81,20 @@ public class UserBean {
      */
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

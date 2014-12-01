@@ -4,8 +4,14 @@
     Author     : Operio
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/mystyle.css" rel="stylesheet">
+<link href="css/carousel.css" rel="stylesheet">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@page import="Beans.UserBean"%>
+<%@page import="DAO.UserDAO"%>
 <% UserBean userBean = (UserBean)(request.getSession().getAttribute("facultySessionUser"));%>
 
 <!DOCTYPE html>
@@ -48,7 +54,7 @@ HttpSession ses = request.getSession(false);
 <h2>Hi, Teacher Username!</h2>
     <iframe class="iFrame1" id="iFrame1" align="right"  name="Studentframe" ></iframe>
     <iframe class="iFrame1" id="iFrame2" align="right"  name="Classframe" ></iframe><br>
-    <input type="button" class="btn btn-success" id="button" value="ClassList" onclick="Classframe.location.href='ClassList.jsp'">
+ <input type="button" class="btn btn-success" id="button" value="ClassList" onclick="Classframe.location.href='ClassList.jsp'">
   
 </body>
 </html>

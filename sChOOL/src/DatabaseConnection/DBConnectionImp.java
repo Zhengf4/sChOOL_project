@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class DBConnectionImp extends ConnectionFactory {
 
     private String _driver = "com.mysql.jdbc.Driver";
-    private String _password = "";
+    private String _password = "11111111";
     private String _url = "jdbc:mysql://127.0.0.1:3306/school";
     private String _username = "root";
 

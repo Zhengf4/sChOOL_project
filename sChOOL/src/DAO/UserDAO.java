@@ -127,6 +127,7 @@ public class UserDAO {
             while(resultSet.next()){
                 UserBean userBean = new UserBean();
                 userBean.setUserId(resultSet.getString("userId"));
+                userBean.setName(resultSet.getString("name"));
                 userBean.setPassword(resultSet.getString("password"));
                 userBean.setProfession(resultSet.getString("profession"));
                 list.add(userBean);
@@ -137,8 +138,27 @@ public class UserDAO {
         }
         return list;
     }
-       
-           
+        
+      public ArrayList<UserBean> studentList(){
+          ArrayList <UserBean> list = new ArrayList<UserBean>();
+             try{
+            ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+            connection = connectionFactory.getConnection();
+            preparedStatement = connection.prepareStatement("select * from user");
+             resultSet = preparedStatement.executeQuery();
+              while(resultSet.next()){
+                UserBean userBean = new UserBean();
+                userBean.setUserId(resultSet.getString("userId"));
+                  userBean.setName(resultSet.getString("name"));
+                list.add(userBean);
+            }
+            closeAll();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+     
     public void closeAll(){
         ConnectionFactory.closeConnection(connection);
         ConnectionFactory.closeResultSet(resultSet);
