@@ -58,9 +58,10 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement("select announcement from announcement where announcementId = ?");
             preparedStatement.setInt(1,1);
             resultSet =  preparedStatement.executeQuery();
-
-                     announcement=resultSet.getString("announcement"); 
-  
+            if(resultSet.next()){
+            	announcement=resultSet.getString("announcement"); 
+            }
+                     
             closeAll();
              }catch(SQLException e){
             e.printStackTrace();}
