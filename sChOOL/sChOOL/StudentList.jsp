@@ -45,10 +45,10 @@
         %>
             <tr>
         <td align="center"><%=student_name%></td>
-        <td align="center" contenteditable='true'></td>
-        <td align="center" contenteditable='true'>87</td>
-        <td align="center" contenteditable='true'>87</td>
-        <td align="center" contenteditable='true'>89</td>
+        <td align="center"></td>
+        <td align="center"><input type="text" value="87" contenteditable="false"/></td>
+        <td align="center"><input type="text" value="87" contenteditable="false"/></td>
+        <td align="center"><input type="text" value="89" contenteditable="false"/></td>
            </tr>
    <% }%>
     </tr>
