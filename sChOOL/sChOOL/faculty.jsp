@@ -41,7 +41,6 @@ HttpSession ses = request.getSession(false);
                 <li>
                     
                     <form action="LogOut">
-                    <input type="hidden" value="<%=userBean.getSessionId()%> name="session_Id>
                    <INPUT Type="submit" class="btn btn-primary" VALUE="Log Out" >    
                     
                     </form>

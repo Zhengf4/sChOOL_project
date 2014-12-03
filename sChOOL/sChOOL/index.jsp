@@ -51,7 +51,6 @@
         <div class="container">
                 <p>Username: <input id="userId" type="text" name="userId" maxlength="30"></p>
                 <p>Password: <input id="password" type="password" name="password" maxlength="30"></p>
-                <input type="hidden" value="${pageContext.session.id}" name="sessionId">
         </div>
 
       </div>

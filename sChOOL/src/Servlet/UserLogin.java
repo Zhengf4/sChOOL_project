@@ -37,77 +37,52 @@ public class UserLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            UserBean userBean = new UserBean();
-            userBean.setUserId(request.getParameter("userId"));
-            userBean.setPassword(request.getParameter("password"));
-            userBean.setSessionId(request.getParameter("sessionId"));
-            userBean.setAnnouncement(request.getParameter("announcement"));
             
+        	String userId = request.getParameter("userId");
+        	String password = request.getParameter("password");
+        	
             UserDAO userDAO = new UserDAO();
-           
-            boolean userexist = userDAO.login(userBean);
-            String profession = userDAO.validatePerson(userBean.getUserId());
-            String userId = userBean.getUserId();
-            String sessionId = userBean.getSessionId();
-            String announcement = userBean.getAnnouncement();
+            UserBean user = userDAO.FindUser(userId,password);
             
-            
-             if(userexist && profession.toLowerCase().equals("student")) 
-           {
-               userDAO.addSession(userId,sessionId);
-                 HttpSession session = request.getSession(true);
-
-        
-               session.setAttribute("studentSessionUser",userBean);
-                session.setMaxInactiveInterval(15*60);
-                
-                Cookie userID = new Cookie("studentSessionUser",userBean.getUserId());
-                userID.setMaxAge(15*60);
-                response.addCookie(userID);
-                response.sendRedirect("student.jsp");
-           }
-            else if(userexist && profession.toLowerCase().equals("faculty"))
-           {
-               userDAO.addSession(userId,sessionId);
-                 HttpSession session = request.getSession(true);
-
-        
-                session.setAttribute("facultySessionUser",userBean);
-                session.setMaxInactiveInterval(15*60);
-                
-                Cookie userID = new Cookie("facultySessionUser",userBean.getUserId());
-                userID.setMaxAge(15*60);
-                response.addCookie(userID);
-                response.sendRedirect("faculty.jsp");
-   
-
-           }
-            else if(userexist && profession.toLowerCase().equals("admin"))
-           {
-              userDAO.addSession(userId,sessionId);
-                 HttpSession session = request.getSession(true);
-
-        
-                session.setAttribute("adminSessionUser",userBean);
-                session.setMaxInactiveInterval(15*60);
-                
-                Cookie userID = new Cookie("adminSessionUser",userBean.getUserId());
-                userID.setMaxAge(15*60);
-                response.addCookie(userID);
-                response.sendRedirect("admin.jsp");
-   
-           }
-           
-            else{
-                out.println("<script>");
+            if(user == null){
+            	PrintWriter out = response.getWriter();
+            	out.println("<script>");
                 out.println("alert(\"INVALID ACCESS!\");");
                 out.println("window.location=\"index.jsp\";");
                 out.println("</script>");
-               
+                
+            } else {
+            	HttpSession session = request.getSession(true);
+                if(user.getProfession().equals("student")){
+                	session.setAttribute("studentSessionUser",user);
+	                session.setMaxInactiveInterval(15*60);
+	                
+	                Cookie userID = new Cookie("studentSessionUser",user.getUserId());
+	                userID.setMaxAge(15*60);
+	                response.addCookie(userID);
+	                response.sendRedirect("student.jsp");
+	                
+	             } else if(user.getProfession().equals("faculty")){
+	                session.setAttribute("facultySessionUser",user);
+	                session.setMaxInactiveInterval(15*60);
+	                
+	                Cookie userID = new Cookie("facultySessionUser",user.getUserId());
+	                userID.setMaxAge(15*60);
+	                response.addCookie(userID);
+	                response.sendRedirect("FacultyPage");
+	   
+	            } else { //admin access
+	                session.setAttribute("adminSessionUser",user);
+	                session.setMaxInactiveInterval(15*60);
+	                
+	                Cookie userID = new Cookie("adminSessionUser",user.getUserId());
+	                userID.setMaxAge(15*60);
+	                response.addCookie(userID);
+	                response.sendRedirect("admin.jsp");
+	   
+	            }
+                
             }
-        }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -121,7 +96,7 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+    	
     }
 
     /**

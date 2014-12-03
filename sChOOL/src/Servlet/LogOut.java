@@ -36,13 +36,6 @@ public class LogOut extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            UserBean userBean = new UserBean();
-        
-            userBean.setSessionId(request.getParameter("sessionId"));
-            
-             UserDAO userDAO = new UserDAO();
-             
         
             HttpSession session = request.getSession(false);
             if(session!=null)
@@ -50,7 +43,7 @@ public class LogOut extends HttpServlet {
                 session.invalidate();
                 response.sendRedirect("index.jsp");
             }
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,7 +72,6 @@ public class LogOut extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
