@@ -7,6 +7,7 @@ package DAO;
 
 import Beans.UserBean;
 import DatabaseConnection.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -165,6 +166,31 @@ public class UserDAO {
         ConnectionFactory.closeResultSet(resultSet);
         ConnectionFactory.closeStatement(preparedStatement);
     }
+
+	public UserBean FindUser(String userId, String password) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+       
+        try {
+        	 String sql = "SELECT userId, password, name, profession FROM school.user "
+        		+ "where userId='"+ userId +"' AND password='" + password + "'";
+
+        	 preparedStatement = connection.prepareStatement(sql);
+        	 ResultSet rs = preparedStatement.executeQuery();
+        	 if(rs.next()){
+        		 UserBean user = new UserBean();
+        		 user.setUserId(rs.getString("userId"));
+        		 user.setPassword(rs.getString("password"));
+        		 user.setName(rs.getString("name"));
+        		 user.setProfession(rs.getString("profession"));
+        		 return user;
+        	 }
+        	 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
     
     
 }
