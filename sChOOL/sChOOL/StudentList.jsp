@@ -10,6 +10,8 @@
 <link href="css/mystyle.css" rel="stylesheet">
 <link href="css/carousel.css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@page import="Beans.UserBean"%>
 <%@page import="DAO.UserDAO"%>
 <% UserBean userBean = (UserBean)(request.getSession().getAttribute("facultySessionUser"));%>
