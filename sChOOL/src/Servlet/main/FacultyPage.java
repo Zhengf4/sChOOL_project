@@ -1,4 +1,4 @@
-package Servlet;
+package Servlet.main;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class FacultyPage extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserBean user = (UserBean) request.getSession().getAttribute("facultySessionUser");
+		
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/faculty.jsp");
 		requestDispatcher.forward(request, response);
