@@ -5,14 +5,16 @@
  */
 package DAO;
 
-import Beans.UserBean;
-import DatabaseConnection.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import Beans.ClassBean;
+import Beans.Student;
+import Beans.UserBean;
+import DatabaseConnection.ConnectionFactory;
 
 /**
  *
@@ -172,24 +174,92 @@ public class UserDAO {
         connection = connectionFactory.getConnection();
        
         try {
-        	 String sql = "SELECT userId, password, name, profession FROM school.user "
-        		+ "where userId='"+ userId +"' AND password='" + password + "'";
+        	 String query = "SELECT userId, password, name, profession FROM school.user "
+        		+ "where userId= ? AND password= ?";
 
-        	 preparedStatement = connection.prepareStatement(sql);
+        	 preparedStatement = connection.prepareStatement(query);
+        	 preparedStatement.setString(1, userId);
+        	 preparedStatement.setString(2, password);
         	 ResultSet rs = preparedStatement.executeQuery();
+        	 UserBean user = null;
+        	 
         	 if(rs.next()){
-        		 UserBean user = new UserBean();
+        		 user = new UserBean();
         		 user.setUserId(rs.getString("userId"));
         		 user.setPassword(rs.getString("password"));
         		 user.setName(rs.getString("name"));
         		 user.setProfession(rs.getString("profession"));
-        		 return user;
         	 }
         	 
+        	 closeAll();
+        	 return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public ArrayList<ClassBean> FetchClassList(String facultyId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+       	 String query = "SELECT c.classId, level, section FROM subject a "
+       	 		+ "INNER JOIN schedule b on a.subjectId=b.subjectId "
+       	 		+ "INNER JOIN class c on b.classId=c.classId "
+       	 		+ "WHERE teacherId = ?";
+
+       	 preparedStatement = connection.prepareStatement(query);
+       	 preparedStatement.setString(1, facultyId);
+       	 ResultSet rs = preparedStatement.executeQuery();
+       	 ArrayList<ClassBean> classList = new ArrayList<ClassBean>();
+       	 
+       	 while(rs.next()){
+       		String classId = rs.getString("classId");
+       		String level = rs.getString("level");
+       		String section = rs.getString("section");
+       		
+       		ClassBean classBean = new ClassBean(classId,level,section);
+       		classList.add(classBean);
+       	 }
+       	 
+       	 closeAll();
+       	 return classList;
+       	 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ArrayList<Student> FetchStudentList(String classId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+          	 String query = "SELECT studentId, name FROM enroll a "
+          	 		+ "INNER JOIN user b on a.studentId=b.userId "
+          	 		+ "WHERE a.classId = ?";
+
+          	 preparedStatement = connection.prepareStatement(query);
+          	 preparedStatement.setString(1, classId);
+          	 ResultSet rs = preparedStatement.executeQuery();
+          	 ArrayList<Student> studentList = new ArrayList<Student>();
+          	 
+          	 while(rs.next()){
+          		 String studentId = rs.getString("studentId");
+          		 String name = rs.getString("name");
+          		 Student student = new Student(studentId, name);
+          		 studentList.add(student);
+          	 }
+          	 
+          	 closeAll();
+          	 return studentList;
+          	 
+   		} catch (SQLException e) {
+   			e.printStackTrace();
+   		}
+   		return null;
 	}
     
     

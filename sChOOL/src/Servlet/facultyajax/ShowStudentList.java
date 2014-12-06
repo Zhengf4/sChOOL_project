@@ -1,0 +1,55 @@
+package Servlet.facultyajax;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import Beans.Student;
+import DAO.UserDAO;
+
+/**
+ * Servlet implementation class ShowStudentList
+ */
+@WebServlet("/ShowStudentList")
+public class ShowStudentList extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ShowStudentList() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String classId = request.getParameter("classId");
+		UserDAO userDao = new UserDAO();
+		ArrayList<Student> studentList = userDao.FetchStudentList(classId);
+		
+		PrintWriter pw = response.getWriter();
+		String studentListString = "<ul style='list-style-type:none'>";
+		for(int i=0; i < studentList.size(); i++){
+			studentListString += "<li class='list'>" + studentList.get(i).getName() + "</li>";
+		}
+		studentListString += "</ul>";
+		pw.write(studentListString);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+}
