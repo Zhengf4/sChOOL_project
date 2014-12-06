@@ -32,9 +32,9 @@ public class ShowStudentList extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String classId = request.getParameter("classId");
+		String classCode = request.getParameter("classCode");
 		UserDAO userDao = new UserDAO();
-		ArrayList<Student> studentList = userDao.FetchStudentList(classId);
+		ArrayList<Student> studentList = userDao.FetchStudentList(classCode);
 		
 		PrintWriter pw = response.getWriter();
 		String studentListString = "<ul style='list-style-type:none'>";

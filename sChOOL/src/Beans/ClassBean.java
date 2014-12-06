@@ -1,25 +1,25 @@
 package Beans;
 
 public class ClassBean {
-	private String classId;
+	private String classCode;
 	private String level;
 	private String section;
 	
 	public ClassBean(){}
 
-	public ClassBean(String classId, String level, String section) {
+	public ClassBean(String classCode, String level, String section) {
 		super();
-		this.classId = classId;
+		this.classCode = classCode;
 		this.level = level;
 		this.section = section;
 	}
 
-	public String getClassId() {
-		return classId;
+	public String getClassCode() {
+		return classCode;
 	}
 
-	public void setClassId(String classId) {
-		this.classId = classId;
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
 	}
 
 	public String getLevel() {

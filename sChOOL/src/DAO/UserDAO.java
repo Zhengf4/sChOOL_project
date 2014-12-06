@@ -204,9 +204,9 @@ public class UserDAO {
         connection = connectionFactory.getConnection();
         
         try {
-       	 String query = "SELECT c.classId, level, section FROM subject a "
-       	 		+ "INNER JOIN schedule b on a.subjectId=b.subjectId "
-       	 		+ "INNER JOIN class c on b.classId=c.classId "
+       	 String query = "SELECT c.classCode as classCode, level, section FROM subject a "
+       	 		+ "INNER JOIN schedule b on a.subjectCode=b.subjectCode "
+       	 		+ "INNER JOIN class c on b.classCode=c.classCode "
        	 		+ "WHERE teacherId = ?";
 
        	 preparedStatement = connection.prepareStatement(query);
@@ -215,11 +215,11 @@ public class UserDAO {
        	 ArrayList<ClassBean> classList = new ArrayList<ClassBean>();
        	 
        	 while(rs.next()){
-       		String classId = rs.getString("classId");
+       		String classCode = rs.getString("classCode");
        		String level = rs.getString("level");
        		String section = rs.getString("section");
        		
-       		ClassBean classBean = new ClassBean(classId,level,section);
+       		ClassBean classBean = new ClassBean(classCode,level,section);
        		classList.add(classBean);
        	 }
        	 
@@ -232,17 +232,17 @@ public class UserDAO {
 		return null;
 	}
 
-	public ArrayList<Student> FetchStudentList(String classId) {
+	public ArrayList<Student> FetchStudentList(String classCode) {
 		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
         connection = connectionFactory.getConnection();
         
         try {
           	 String query = "SELECT studentId, name FROM enroll a "
           	 		+ "INNER JOIN user b on a.studentId=b.userId "
-          	 		+ "WHERE a.classId = ?";
+          	 		+ "WHERE a.classCode = ?";
 
           	 preparedStatement = connection.prepareStatement(query);
-          	 preparedStatement.setString(1, classId);
+          	 preparedStatement.setString(1, classCode);
           	 ResultSet rs = preparedStatement.executeQuery();
           	 ArrayList<Student> studentList = new ArrayList<Student>();
           	 

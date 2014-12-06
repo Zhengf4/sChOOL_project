@@ -69,7 +69,7 @@
 		
 		function showStudentList(Id){
 			var param = {
-				classId : Id
+				classCode : Id
 			};
 			$.ajax({
 				type : "get",

@@ -39,7 +39,7 @@ public class ShowClassList extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		String classListString = "";
 		for(int i=0; i < classList.size(); i++){
-			classListString += "<a onclick=showStudentList('" + classList.get(i).getClassId() + "') class='list'>" 
+			classListString += "<a onclick=showStudentList('" + classList.get(i).getClassCode() + "') class='list'>" 
 					+ classList.get(i).getLevel() + " section: " + classList.get(i).getSection() + "</a></br>";
 		}
 		pw.write(classListString);
