@@ -10,13 +10,80 @@
 <link href="css/mystyle.css" rel="stylesheet">
 <link href="css/carousel.css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%@page import="Beans.UserBean"%>
-<%@page import="DAO.UserDAO"%>
-<% UserBean userBean = (UserBean)(request.getSession().getAttribute("facultySessionUser"));%>
 
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+		#sidePane{
+			position:absolute;
+			width: 300px;
+			height: 500px;
+		}
+		
+		#listPane{
+			position: absolute;
+			left: 300px;
+			width: 600px;
+			height: 500px;
+		}
+		
+		#studentList{
+			position: absolute;
+			right: 0px;
+			width: 300px;
+			height: 500px;
+		}
+		
+		#classList{
+			position: absolute;
+			width: 300px;
+			height: 500px;
+		}
+		
+		.list:hover{
+			background-color: orange;
+		}
+	</style>
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#activateList").click(showClassList);
+		});
+		
+		function showClassList(){
+			var param = {
+					facultyId: $("#facultyId").val()
+			};
+			
+			$.ajax({
+				type : "get",
+				url : "ShowClassList",
+				data : param,
+				success : function(result){
+					$('#classList').html(result);
+				}
+			});
+		}
+		
+		function showStudentList(Id){
+			var param = {
+				classId : Id
+			};
+			$.ajax({
+				type : "get",
+				url : "ShowStudentList",
+				data : param,
+				success : function(result){
+					$('#studentList').html(result);
+				}
+			});
+	
+		}
+		
+	</script>
+
     <script type = "text/javascript">
      window.history.forward();
      function noBack() { window.history.forward();}
@@ -28,13 +95,6 @@
 </head>
 
 <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
-    <%
-HttpSession ses = request.getSession(false);
- if(ses.getAttribute("facultySessionUser")==null){
-    response.sendRedirect("index.jsp");
-    return;
-}
-%>
     <div class="navbar navbar-inverse">
        <div class="container">
             <ul class="nav nav-pills pull-right">
@@ -50,10 +110,22 @@ HttpSession ses = request.getSession(false);
       </div>
     </div>
     
-<h2>Hi, Teacher Username!</h2>
-    <iframe class="iFrame1" id="iFrame1" align="right"  name="Studentframe" ></iframe>
-    <iframe class="iFrame1" id="iFrame2" align="right"  name="Classframe" ></iframe><br>
- <input type="button" class="btn btn-success" id="button" value="ClassList" onclick="Classframe.location.href='ClassList.jsp'">
-  
+<h2>Hi, Teacher ${user.getName()}!</h2></br>
+<input type="hidden" value="${user.getUserId()}" id="facultyId"/>
+
+<div id="sidePane">
+	<input type="button" class="btn btn-success" id="activateList" value="Class List"/>
+</div>
+
+<div id="listPane">
+	<div id="classList">
+ 		<p align="center">Click on the Class List button to view classes handled</p>
+ 	</div>
+ 
+ 	<div id="studentList">
+ 		<p align="center">Click on the class you wish to view students from</p>
+ 	</div>
+</div>
+
 </body>
 </html>
