@@ -37,10 +37,15 @@ public class ShowClassList extends HttpServlet {
 		ArrayList<ClassBean> classList = userDao.FetchClassList(facultyId);
 		
 		PrintWriter pw = response.getWriter();
-		String classListString = "";
+		String classListString = "<h4>Class:</h4>";
 		for(int i=0; i < classList.size(); i++){
-			classListString += "<a onclick=showStudentList('" + classList.get(i).getClassCode() + "') class='list'>" 
-					+ classList.get(i).getLevel() + " section: " + classList.get(i).getSection() + "</a></br>";
+			String classCode = classList.get(i).getClassCode();
+			String level = classList.get(i).getLevel();
+			String section = classList.get(i).getSection();
+			String subjectCode = classList.get(i).getSubjectCode();
+			
+			classListString += "<a onclick=showStudentList('" + classCode + "') class='list'>" 
+					+ level + " section: " + section + " subject: " + subjectCode + "</a></br>";
 		}
 		pw.write(classListString);
 	}

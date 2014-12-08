@@ -37,7 +37,9 @@ public class ShowStudentList extends HttpServlet {
 		ArrayList<Student> studentList = userDao.FetchStudentList(classCode);
 		
 		PrintWriter pw = response.getWriter();
-		String studentListString = "<ul style='list-style-type:none'>";
+		String studentListString = 
+				  "<h4>Student/s:</h4>"
+				+ "<ul style='list-style-type:none'>";
 		for(int i=0; i < studentList.size(); i++){
 			studentListString += "<li class='list'>" + studentList.get(i).getName() + "</li>";
 		}

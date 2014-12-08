@@ -33,12 +33,14 @@
 			right: 0px;
 			width: 300px;
 			height: 500px;
+			padding: 10px;
 		}
 		
 		#classList{
 			position: absolute;
 			width: 300px;
 			height: 500px;
+			padding: 10px;
 		}
 		
 		.list:hover{
@@ -53,6 +55,7 @@
 		});
 		
 		function showClassList(){
+			var message = "<p align='center'>Click on the class you wish to view students from</p>";
 			var param = {
 					facultyId: $("#facultyId").val()
 			};
@@ -63,6 +66,7 @@
 				data : param,
 				success : function(result){
 					$('#classList').html(result);
+					$('#studentList').html(message);
 				}
 			});
 		}
@@ -123,7 +127,6 @@
  	</div>
  
  	<div id="studentList">
- 		<p align="center">Click on the class you wish to view students from</p>
  	</div>
 </div>
 
