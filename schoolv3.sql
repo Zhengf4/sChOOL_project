@@ -215,7 +215,7 @@ INSERT INTO subject (subjectCode, description, teacherId) VALUE
 ('science1','Botany','190'),
 ('science2','Biology','190'),
 ('science3','Chemistry','127'),
-('science4','Physics','127'),
+('science4','Physics','170'),
 ('english1','English comprehension level 1','120'),
 ('english2','English comprehension level 2','124'),
 ('english3','World Literature level 1','124'),
