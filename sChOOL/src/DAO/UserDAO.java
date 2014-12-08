@@ -204,7 +204,8 @@ public class UserDAO {
         connection = connectionFactory.getConnection();
         
         try {
-       	 String query = "SELECT c.classCode as classCode, level, section FROM subject a "
+       	 String query = 
+       			  "SELECT c.classCode as classCode, level, section, a.subjectCode as subjectCode FROM subject a "
        	 		+ "INNER JOIN schedule b on a.subjectCode=b.subjectCode "
        	 		+ "INNER JOIN class c on b.classCode=c.classCode "
        	 		+ "WHERE teacherId = ?";
@@ -218,8 +219,9 @@ public class UserDAO {
        		String classCode = rs.getString("classCode");
        		String level = rs.getString("level");
        		String section = rs.getString("section");
+       		String subjectCode = rs.getString("subjectCode");
        		
-       		ClassBean classBean = new ClassBean(classCode,level,section);
+       		ClassBean classBean = new ClassBean(classCode,level,section,subjectCode);
        		classList.add(classBean);
        	 }
        	 
@@ -237,7 +239,8 @@ public class UserDAO {
         connection = connectionFactory.getConnection();
         
         try {
-          	 String query = "SELECT studentId, name FROM enroll a "
+          	 String query = 
+          			  "SELECT studentId, name FROM enroll a "
           	 		+ "INNER JOIN user b on a.studentId=b.userId "
           	 		+ "WHERE a.classCode = ?";
 

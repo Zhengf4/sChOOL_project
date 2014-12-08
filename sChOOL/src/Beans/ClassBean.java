@@ -4,14 +4,24 @@ public class ClassBean {
 	private String classCode;
 	private String level;
 	private String section;
+	private String subjectCode;
 	
 	public ClassBean(){}
 
-	public ClassBean(String classCode, String level, String section) {
+	public ClassBean(String classCode, String level, String section, String subjectCode) {
 		super();
 		this.classCode = classCode;
 		this.level = level;
 		this.section = section;
+		this.subjectCode = subjectCode;
+	}
+
+	public String getSubjectCode() {
+		return subjectCode;
+	}
+
+	public void setSubjectCode(String subjectCode) {
+		this.subjectCode = subjectCode;
 	}
 
 	public String getClassCode() {
