@@ -368,5 +368,25 @@ INSERT INTO grade (gradeId, grade, quarter, subjectCode, studentId) VALUE
 ('57','86','first','history4','415'),
 ('58','94','first','science4','415'),
 ('59','95','first','english4','415'),
-('60','82','first','filipino4','415');
+('60','82','first','filipino4','415'),
+
+
+
+('61','80','second','math1','404'),
+('62','79','second','history1','404'),
+('63','88','second','science1','404'),
+('64','95','second','english1','404'),
+('65','80','second','filipino1','404'),
+
+('66','90','second','math1','405'),
+('67','79','second','history1','405'),
+('68','80','second','science1','405'),
+('69','70','second','english1','405'),
+('70','70','second','filipino1','405'),
+
+('71','90','second','math1','406'),
+('72','88','second','history1','406'),
+('73','95','second','science1','406'),
+('74','95','second','english1','406'),
+('75','93','second','filipino1','406');
 
