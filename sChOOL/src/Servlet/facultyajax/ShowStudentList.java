@@ -33,15 +33,19 @@ public class ShowStudentList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String classCode = request.getParameter("classCode");
+		String subjectCode = request.getParameter("subjectCode");
+		
 		UserDAO userDao = new UserDAO();
-		ArrayList<Student> studentList = userDao.FetchStudentList(classCode);
+		ArrayList<String> studentList = userDao.FetchStudentList(classCode);
 		
 		PrintWriter pw = response.getWriter();
 		String studentListString = 
-				  "<h4>Student/s:</h4>"
+				  "<table><tr><td><h4>Student/s:</h4></td>"
+				+ "<td><input type='button' class='btn btn-success' style='width:90px;height:30px;font-size:10px' onclick=showStudentGrades('" + classCode + "','" + subjectCode + "') value='Edit Grades'/>"
+				+ "</td></tr></table>"
 				+ "<ul style='list-style-type:none'>";
 		for(int i=0; i < studentList.size(); i++){
-			studentListString += "<li class='list'>" + studentList.get(i).getName() + "</li>";
+			studentListString += "<li class='list'>" + studentList.get(i) + "</li>";
 		}
 		studentListString += "</ul>";
 		pw.write(studentListString);

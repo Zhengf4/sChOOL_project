@@ -234,26 +234,23 @@ public class UserDAO {
 		return null;
 	}
 
-	public ArrayList<Student> FetchStudentList(String classCode) {
+	public ArrayList<String> FetchStudentList(String classCode) {
 		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
         connection = connectionFactory.getConnection();
         
         try {
           	 String query = 
-          			  "SELECT studentId, name FROM enroll a "
+          			  "SELECT name FROM enroll a "
           	 		+ "INNER JOIN user b on a.studentId=b.userId "
           	 		+ "WHERE a.classCode = ?";
 
           	 preparedStatement = connection.prepareStatement(query);
           	 preparedStatement.setString(1, classCode);
           	 ResultSet rs = preparedStatement.executeQuery();
-          	 ArrayList<Student> studentList = new ArrayList<Student>();
+          	 ArrayList<String> studentList = new ArrayList<String>();
           	 
           	 while(rs.next()){
-          		 String studentId = rs.getString("studentId");
-          		 String name = rs.getString("name");
-          		 Student student = new Student(studentId, name);
-          		 studentList.add(student);
+          		 studentList.add(rs.getString("name"));
           	 }
           	 
           	 closeAll();
