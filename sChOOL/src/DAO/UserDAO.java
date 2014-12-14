@@ -12,7 +12,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joda.time.DateTime;
+
 import Beans.ClassBean;
+import Beans.Clearance;
 import Beans.Student;
 import Beans.Subject;
 import Beans.UserBean;
@@ -387,6 +390,37 @@ public class UserDAO {
   		} catch (SQLException e) {
   			e.printStackTrace();
   		}
+	}
+
+	public ArrayList<Clearance> FetchStudentClearance(String studentId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        ArrayList<Clearance> clearanceList = new ArrayList<Clearance>();
+        
+        try {
+        	String query = "SELECT studentId, description, dateIssued, dateResolved FROM clearance "
+            				+ "INNER JOIN user on studentId = userId "
+            				+ "WHERE userId = ?";
+        	
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, studentId);
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			while(rs.next()){
+				Clearance newClearance = new Clearance();
+				newClearance.setClearance(rs.getString("description"));
+				newClearance.setDateTimeIssued(new DateTime(rs.getTimestamp("dateIssued").getTime()));
+				newClearance.setDateTimeResolved(rs.getTimestamp("dateResolved") == null ? null : new DateTime(rs.getTimestamp("dateResolved")));
+				clearanceList.add(newClearance);
+			}
+			
+			closeAll();
+			return clearanceList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+		return null;
 	}
     
     
