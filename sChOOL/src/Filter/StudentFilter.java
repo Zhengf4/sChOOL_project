@@ -17,15 +17,15 @@ import javax.servlet.http.HttpSession;
 import Beans.UserBean;
 
 /**
- * Servlet Filter implementation class FacultyFilter
+ * Servlet Filter implementation class StudentFilter
  */
-@WebFilter(urlPatterns={"/FacultyFilter","/FacultyPage"})
-public class FacultyFilter implements Filter {
+@WebFilter(urlPatterns={"/StudentFilter","/StudentPage"})
+public class StudentFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public FacultyFilter() {
+    public StudentFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -42,8 +42,8 @@ public class FacultyFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest)request).getSession();
 		
-		UserBean faculty = (UserBean)session.getAttribute("facultySessionUser");
-		if(faculty == null || !faculty.getProfession().equals("faculty")){
+		UserBean student = (UserBean)session.getAttribute("studentSessionUser");
+		if(student == null || !student.getProfession().equals("student")){
 			((HttpServletResponse)response).sendRedirect("LogOut");
 		} else {
 			chain.doFilter(request, response);

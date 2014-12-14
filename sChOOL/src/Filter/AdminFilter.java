@@ -1,7 +1,6 @@
 package Filter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,15 +16,15 @@ import javax.servlet.http.HttpSession;
 import Beans.UserBean;
 
 /**
- * Servlet Filter implementation class FacultyFilter
+ * Servlet Filter implementation class AdminFilter
  */
-@WebFilter(urlPatterns={"/FacultyFilter","/FacultyPage"})
-public class FacultyFilter implements Filter {
+@WebFilter(urlPatterns={"/AdminFilter","/AdminPage"})
+public class AdminFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public FacultyFilter() {
+    public AdminFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -42,8 +41,8 @@ public class FacultyFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest)request).getSession();
 		
-		UserBean faculty = (UserBean)session.getAttribute("facultySessionUser");
-		if(faculty == null || !faculty.getProfession().equals("faculty")){
+		UserBean admin = (UserBean)session.getAttribute("adminSessionUser");
+		if(admin == null || !admin.getProfession().equals("admin")){
 			((HttpServletResponse)response).sendRedirect("LogOut");
 		} else {
 			chain.doFilter(request, response);
