@@ -39,6 +39,7 @@ public class ShowClearance extends HttpServlet {
 		
 		UserDAO userDao = new UserDAO();
 		ArrayList<Clearance> clearanceList = userDao.FetchStudentClearance(studentId);
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 		
 		PrintWriter pw = response.getWriter();
 		String clearanceString = "";
@@ -48,13 +49,11 @@ public class ShowClearance extends HttpServlet {
 			
 			for(int i = 0; i < clearanceList.size(); i++){
 				if(i == 0){
-					
 					clearanceString += "<table><tr><th>Date Issued</th><th>Issue</th></tr>";
 				}
 				
 				if(clearanceList.get(i).getDateTimeResolved() == null){
 					ctr--;
-					DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 					String dateTime = clearanceList.get(i).getDateTimeIssued().toString(fmt);
 					clearanceString += "<tr>";
 					clearanceString += "<td>" + dateTime + "</td>";
