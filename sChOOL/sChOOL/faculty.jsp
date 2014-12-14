@@ -154,10 +154,10 @@
 					url : "UpdateStudentGrade",
 					data : param,
 					success : function(){
-						
+						alert("saved!");
 					}
 				});
-				
+		
 			} else {
 				toggle = 1;
 				element.getElementsByTagName("input").item(0).disabled = false;
