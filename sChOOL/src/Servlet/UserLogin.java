@@ -60,7 +60,7 @@ public class UserLogin extends HttpServlet {
 	                Cookie userID = new Cookie("studentSessionUser",user.getUserId());
 	                userID.setMaxAge(15*60);
 	                response.addCookie(userID);
-	                response.sendRedirect("student.jsp");
+	                response.sendRedirect("StudentPage");
 	                
 	             } else if(user.getProfession().equals("faculty")){
 	                session.setAttribute("facultySessionUser",user);
@@ -78,7 +78,7 @@ public class UserLogin extends HttpServlet {
 	                Cookie userID = new Cookie("adminSessionUser",user.getUserId());
 	                userID.setMaxAge(15*60);
 	                response.addCookie(userID);
-	                response.sendRedirect("admin.jsp");
+	                response.sendRedirect("AdminPage");
 	   
 	            }
                 
