@@ -4,7 +4,6 @@
     Author     : Operio
 --%>
 
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/mystyle.css" rel="stylesheet">

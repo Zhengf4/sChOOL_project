@@ -5,8 +5,6 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Beans.UserBean"%>
-<% UserBean userBean = (UserBean)(request.getSession().getAttribute("adminSessionUser"));%>
 
 <!DOCTYPE html>
 <html>
@@ -22,20 +20,13 @@
 </head>
 
 <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
-    <%
-HttpSession ses = request.getSession(false);
- if(ses.getAttribute("adminSessionUser")==null){
-    response.sendRedirect("index.jsp");
-    return;
-}
-%>
+
     <div class="navbar navbar-inverse">
        <div class="container">
             <ul class="nav nav-pills pull-right">
                 <li>
                     
                     <form action="LogOut">
-                         <input type="hidden" value="<%=userBean.getSessionId()%> name="session_Id>
                    <INPUT Type="submit" class="btn btn-primary" VALUE="Log Out" >    
                     
                     </form>
@@ -45,7 +36,8 @@ HttpSession ses = request.getSession(false);
       </div>
     </div>
     
-    <h2>Hi, Admininstrator Username!</h2>
+    <h2>Hi, Admininstrator ${user.getName()}!</h2>
+    <input type="hidden" value="${user.getUserId()}" id="adminId"/>
 	<iframe class="iFrame1" id="iFrame1" align="right"  name="Studentframe" ></iframe>
 	<iframe class="iFrame1" id="iFrame2" align="right"  name="Classframe" ></iframe><br>
 	<input class="btn btn-success" type="button" id="button" value="Add ID" onclick="Classframe.location.href='AddClass.jsp'"><br><br>
