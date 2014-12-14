@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
+import Beans.Announcement;
 import Beans.ClassBean;
 import Beans.Clearance;
 import Beans.Student;
@@ -42,18 +45,24 @@ public class UserDAO {
         return false;
     }
     
-       public boolean updateAnnouncement(String announcement){
-             try{
-            ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
-            connection = connectionFactory.getConnection();
-            preparedStatement = connection.prepareStatement("update announcement set announcement = ? where announcementId = 1");
-            preparedStatement.setString(1, announcement);
-            preparedStatement.executeUpdate();
-            closeAll();
-            return true;
-             }catch(SQLException e){
-            e.printStackTrace();}
-            return false;    
+       public void updateAnnouncement(int announcementId, String announcement){
+    	   ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+           connection = connectionFactory.getConnection();
+           
+           try {
+        	   String query = "UPDATE announcement SET announcement = ?, dateIssued = ? where announcementId = ?";
+        	   preparedStatement = connection.prepareStatement(query);
+        	   preparedStatement.setString(1, announcement);
+        	   DateTime now = new DateTime();
+        	   DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        	   preparedStatement.setString(2, now.toString(fmt));
+        	   preparedStatement.setInt(3, announcementId);
+        	   preparedStatement.executeUpdate();
+        	   
+        	   closeAll();
+           }catch(SQLException e){
+        	   e.printStackTrace();
+           }
        }
      
        public String selectAnnouncement(){  
@@ -474,6 +483,95 @@ public class UserDAO {
 		}
         
 		return null;
+	}
+
+	public ArrayList<Announcement> FetchAnnouncements(String adminId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+    	
+		try {
+			String query = "SELECT announcementId, announcement, dateIssued FROM announcement "
+							+ "INNER JOIN user on adminId = userId "
+							+ "WHERE profession = 'admin' ORDER BY dateIssued DESC";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();
+			ArrayList<Announcement> announcementList = new ArrayList<Announcement>();
+			
+			while(rs.next()){
+				int announcementId = rs.getInt("announcementId");
+				String message = rs.getString("announcement");
+				DateTime dateIssued = new DateTime(rs.getTimestamp("dateIssued").getTime());
+				Announcement announcement = new Announcement(announcementId, message,dateIssued);
+				announcementList.add(announcement);
+			}
+			
+			closeAll();
+			return announcementList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+		return null;
+	}
+
+	public void deleteAnnouncement(int announcementId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+			String query = "DELETE FROM announcement where announcementId = ?";
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1,announcementId);
+			preparedStatement.executeUpdate();
+			
+			closeAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void addAnnouncement(Announcement announcement, String adminId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+			String query = "INSERT INTO announcement (announcement, dateIssued, adminId) VALUES (?,?,?)";
+			DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, announcement.getAnnouncement());
+			preparedStatement.setString(2, announcement.getDateIssued().toString(fmt));
+			preparedStatement.setString(3, adminId);
+			preparedStatement.executeUpdate();
+			
+			closeAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void addUser(UserBean user) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+			String query = "INSERT INTO user (userId, name, password, profession) VALUES (?,?,?,?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, user.getUserId());
+			preparedStatement.setString(2, user.getName());
+			preparedStatement.setString(3, user.getPassword());
+			preparedStatement.setString(4, user.getProfession());
+			preparedStatement.executeUpdate();
+			
+			closeAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
     
     

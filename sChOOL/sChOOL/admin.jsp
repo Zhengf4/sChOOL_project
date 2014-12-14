@@ -9,10 +9,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <script type = "text/javascript">
-     window.history.forward();
-     function noBack() { window.history.forward();}
-     </script>
+	<style>
+		#sidePane{
+			position:absolute;
+			width: 300px;
+			height: 500px;
+		}
+		#bodyPane{
+			position: absolute;
+			left: 300px;
+			width: 800px;
+			height: 500px;
+		}
+		table {
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+			color:#333333;
+			border-width: 1px;
+			border-color: #666666;
+			border-collapse: collapse;
+		}
+		table th {
+			border-width: 1px;
+			padding: 5px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #dedede;
+		}
+		table td {
+			border-width: 1px;
+			padding: 5px;
+			border-style: solid;
+			border-color: #666666;
+			background-color: #ffffff;
+		}
+	</style>
+	
+	<script src="js/jquery-2.1.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('#addId').click(assignNewUser);
+			$('#assignFaculty').click();
+			$('#editAnnouncement').click(showAnnouncement);
+		});
+		
+		function assignNewUser(){
+			$.ajax({
+				type : "get",
+				url : "AssignNewUser",
+				success : function(result){
+					$('#bodyPane').html(result);
+					$('#addNewUser').click(addNewUser);
+				}
+			});
+		}
+		
+		function addNewUser(){
+			var param = {
+				name : $('[name=userName]').val(),
+				userId : $('[name=userId]').val(),
+				password : $('[name=password]').val(),
+				profession : $('[name=profession]').val()
+			};
+			
+			$.ajax({
+				type : "get",
+				url : "AddUser",
+				data : param,
+				success : function(result){
+					$('#bodyPane').html(result);
+					alert("User added!");
+				}
+			});
+		}
+		
+		function submitAnnounce(){
+			if($('#announcementBox').val() == ''){
+				alert("Please put an announcement");
+			} else {
+				var param = {
+					adminId : $('#adminId').val(),
+					announcement : $('#announcementBox').val()
+				};
+				$('#announcementBox').val('');
+				$.ajax({
+					type : "get",
+					url : "AddNewAnnouncement",
+					data : param,
+					success : function(){
+						alert("New announcement added!");
+						showAnnouncement();
+					}
+				});
+			}
+		}
+		
+		function showAnnouncement(){
+			$('#bodyPane').html("please wait...");
+			var param = {
+				adminId: $("#adminId").val()
+			};
+				
+			$.ajax({
+				type : "get",
+				url : "ShowAnnouncement",
+				data : param,
+				success : function(result){
+					$('#bodyPane').html(result);
+					$('#submitAnnounceBtn').click(submitAnnounce);
+				}
+			});
+		}
+		
+		var toggle = 0;
+		function editAnnouncement(announcementId){
+			var element = document.getElementById(announcementId);
+			
+			if(toggle == 1){
+				toggle = 0;
+				element.getElementsByTagName("textArea").item(0).disabled = true;
+				element.getElementsByTagName("input").item(0).value = "Edit";
+				
+				if(confirm("Are you sure on announcement change?")){
+					var param = {
+						announcementId : announcementId,
+						message: element.getElementsByTagName("textArea").item(0).value
+					};
+					
+					$.ajax({
+						type : "get",
+						data: param,
+						url : "EditAnnouncement",
+						success : function(){
+							showAnnouncement();
+							alert("Saved");
+						}
+					});
+				}
+				
+			} else {
+				toggle = 1;
+				element.getElementsByTagName("textArea").item(0).disabled = false;
+				element.getElementsByTagName("input").item(0).value = "Save";
+			}
+		}
+		
+		function deleteAnnouncement(announcementId){
+			if(confirm("are you sure you want to delete this announcement?")){
+				var param = {
+						announcementId : announcementId
+				};
+				
+				$.ajax({
+					type : "get",
+					data : param,
+					url : "DeleteAnnouncement",
+					success : function(){
+						alert("Deleted!");
+						showAnnouncement();
+					}
+				});
+			}
+		}
+		
+	</script>
+	
+    <script type = "text/javascript">
+    	window.history.forward();
+    	function noBack() { window.history.forward();}
+    </script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -38,10 +203,15 @@
     
     <h2>Hi, Admininstrator ${user.getName()}!</h2>
     <input type="hidden" value="${user.getUserId()}" id="adminId"/>
-	<iframe class="iFrame1" id="iFrame1" align="right"  name="Studentframe" ></iframe>
-	<iframe class="iFrame1" id="iFrame2" align="right"  name="Classframe" ></iframe><br>
-	<input class="btn btn-success" type="button" id="button" value="Add ID" onclick="Classframe.location.href='AddClass.jsp'"><br><br>
-	<input class="btn btn-success" type="button" id="button" value="Assign Faculty" onclick="Classframe.location.href='AddFaculty.jsp'"><br><br>
-	<input class="btn btn-success" type="button" id="button" value="Edit Announcement" onclick="Classframe.location.href='EditAnnouncement.jsp'">
+    <div id="sidePane">
+    	<input class="btn btn-success" type="button" id="addId" value="Add ID"/><br><br>
+		<input class="btn btn-success" type="button" id="assignFaculty" value="Assign Faculty"/><br><br>
+		<input class="btn btn-success" type="button" id="editAnnouncement" value="Edit Announcement"/>
+    </div>
+    
+    <div id="bodyPane">
+    	<p align="center">Click one of the buttons to start</p>
+    </div>
+	
 </body>
 </html>
