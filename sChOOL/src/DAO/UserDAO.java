@@ -422,6 +422,59 @@ public class UserDAO {
         
 		return null;
 	}
+
+	public ArrayList<Subject> FetchReportCard(String studentId) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        ArrayList<Subject> subjectList = new ArrayList<Subject>();
+        ArrayList<String> quarters = new ArrayList<String>();
+        quarters.add("first");
+        quarters.add("second");
+        quarters.add("third");
+        quarters.add("fourth");
+        
+        try {
+        	String query = "SELECT subjectCode, grade, quarter FROM school.grade WHERE studentId = ? AND quarter= ?";
+        	
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, studentId);
+			
+			for(int quarterNum = 0; quarterNum < 4; quarterNum++){
+				preparedStatement.setString(2, quarters.get(quarterNum));
+				ResultSet rs = preparedStatement.executeQuery();
+				
+				while(rs.next()){
+					String subjectCode = rs.getString("subjectCode");
+					Integer grade = Integer.valueOf(rs.getInt("grade"));
+					String quarter = rs.getString("quarter");
+					
+					if(quarterNum == 0){
+						HashMap<String, Integer> gradeMap = new HashMap<String, Integer>();
+						gradeMap.put(quarter, grade);
+						
+						Subject newSubject = new Subject();
+						newSubject.setSubjectCode(subjectCode);
+						newSubject.setGradeMap(gradeMap);
+						subjectList.add(newSubject);
+						
+					} else {
+						int i = 0;
+						while(!subjectList.get(i).getSubjectCode().equals(subjectCode)){
+							i++;
+						}
+						subjectList.get(i).getGradeMap().put(quarter, grade);
+					}
+				}
+			}
+			
+			closeAll();
+			return subjectList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+		return null;
+	}
     
     
 }

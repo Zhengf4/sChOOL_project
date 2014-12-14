@@ -51,16 +51,32 @@
 		<script>
 			$(document).ready(function(){
 				$('#clearance').click(showClearance);
+				$('#grade').click(showGrades);
 			});
 			
 			function showClearance(){
 				var param = {
-						studentId: $("#studentId").val()
+					studentId: $("#studentId").val()
 				};
 				
 				$.ajax({
 					type : "get",
 					url : "ShowClearance",
+					data : param,
+					success : function(result){
+						$('#bodyPane').html(result);
+					}
+				});
+			}
+			
+			function showGrades(){
+				var param = {
+					studentId: $("#studentId").val()
+				};
+				
+				$.ajax({
+					type : "get",
+					url : "ShowGrades",
 					data : param,
 					success : function(result){
 						$('#bodyPane').html(result);
