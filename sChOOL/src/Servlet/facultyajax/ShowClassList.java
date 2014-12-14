@@ -33,6 +33,7 @@ public class ShowClassList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String facultyId = request.getParameter("facultyId");
+		
 		UserDAO userDao = new UserDAO();
 		ArrayList<ClassBean> classList = userDao.FetchClassList(facultyId);
 		
@@ -44,7 +45,7 @@ public class ShowClassList extends HttpServlet {
 			String section = classList.get(i).getSection();
 			String subjectCode = classList.get(i).getSubjectCode();
 			
-			classListString += "<a onclick=showStudentList('" + classCode + "') class='list'>" 
+			classListString += "<a onclick=showStudentList('" + classCode + "','" + subjectCode + "') class='list'>" 
 					+ level + " section: " + section + " subject: " + subjectCode + "</a></br>";
 		}
 		pw.write(classListString);

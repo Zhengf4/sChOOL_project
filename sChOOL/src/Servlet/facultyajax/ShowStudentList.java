@@ -41,7 +41,8 @@ public class ShowStudentList extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		String studentListString = 
 				  "<table><tr><td><h4>Student/s:</h4></td>"
-				+ "<td><input type='button' class='btn btn-success' style='width:90px;height:30px;font-size:10px' onclick=showStudentGrades('" + classCode + "','" + subjectCode + "') value='Edit Grades'/>"
+				+ "<td><input type='button' class='btn btn-success' style='width:90px;height:30px;font-size:10px' "
+									+ "onclick=showStudentGrades('" + classCode + "','" + subjectCode + "') value='View Grades'/>"
 				+ "</td></tr></table>"
 				+ "<ul style='list-style-type:none'>";
 		for(int i=0; i < studentList.size(); i++){

@@ -10,9 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Beans.ClassBean;
 import Beans.Student;
+import Beans.Subject;
 import Beans.UserBean;
 import DatabaseConnection.ConnectionFactory;
 
@@ -260,6 +262,131 @@ public class UserDAO {
    			e.printStackTrace();
    		}
    		return null;
+	}
+
+	public ArrayList<Student> FetchStudentGrades(String classCode, String subjectCode) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+         	 String query = 
+         			  	"SELECT studentId, name, subjectCode, grade, quarter FROM grade a "
+         			  + "INNER JOIN user b on a.studentId=b.userId "
+         			  + "WHERE subjectCode = ? AND studentId IN "
+         			  + "(SELECT studentId FROM enroll a "
+         			  + "INNER JOIN user b on a.studentId=b.userId "
+         			  + "WHERE a.classCode = ?) ORDER BY studentId ASC";
+
+         	 preparedStatement = connection.prepareStatement(query);
+         	 preparedStatement.setString(1, subjectCode);
+         	 preparedStatement.setString(2, classCode);
+         	
+         	 ResultSet rs = preparedStatement.executeQuery();
+         	 ArrayList<Student> studentList = new ArrayList<Student>();
+         	 int ctr = 0;
+         	 String prevStudentId = "";
+         	 
+         	 while(rs.next()){
+         		 String studentId = rs.getString("studentId");
+         		 String studentName = rs.getString("name");
+         		 String subjCode = rs.getString("subjectCode");
+         		 Integer grade = rs.getInt("grade");
+         		 String quarter = rs.getString("quarter");
+         		 
+         		 if(!studentList.isEmpty() & studentId.equals(prevStudentId)){
+         			 Student student = studentList.get(ctr-1);
+         			 student.getSubjectList().get(0).getGradeMap().put(quarter, grade);
+         			 
+         		 } else {
+         			 Student newStudent = new Student();
+         			 newStudent.setStudentId(studentId);
+         			 newStudent.setName(studentName);
+            		 ArrayList<Subject> subjectList = new ArrayList<Subject>();
+            		 
+            		 //initialize subject
+            		 Subject subject = new Subject();
+            		 subject.setSubjectCode(subjCode);
+            		 
+            		 //insert grade and quarter
+            		 HashMap<String,Integer> gradeMap = new HashMap<String,Integer>();
+            		 gradeMap.put(quarter, grade);
+            		 subject.setGradeMap(gradeMap);
+            		 
+            		 subjectList.add(subject);
+            		 newStudent.setSubjectList(subjectList);
+            		 studentList.add(newStudent);
+            		 ctr++;
+         		 }
+         		 
+         		 prevStudentId = studentId;
+         		 
+         	 }
+         	
+         	 closeAll();
+         	 return studentList;
+         	 
+  		} catch (SQLException e) {
+  			e.printStackTrace();
+  		}
+		return null;
+	}
+
+	public void updateStudentGrade(Student student) {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        String studentId = student.getStudentId();
+        Subject subject = student.getSubjectList().get(0);
+        String subjectCode = subject.getSubjectCode();
+        
+        ArrayList<Integer> grades = new ArrayList<Integer>();
+        grades.add(subject.getGradeMap().get("firstQG"));
+        grades.add(subject.getGradeMap().get("secondQG"));
+        grades.add(subject.getGradeMap().get("thirdQG"));
+        grades.add(subject.getGradeMap().get("fourthQG"));
+        
+        ArrayList<String> quarters = new ArrayList<String>();
+        quarters.add("first");
+        quarters.add("second");
+        quarters.add("third");
+        quarters.add("fourth");
+      
+        try {
+        	for(int i = 0; i < 4; i++){
+	        	String query = "SELECT grade FROM grade WHERE studentId= ? AND quarter= ? AND subjectCode= ?";
+	        	preparedStatement = connection.prepareStatement(query);
+	        	preparedStatement.setString(1, studentId);
+	        	preparedStatement.setString(2, quarters.get(i));
+	        	preparedStatement.setString(3, subjectCode);
+	        	ResultSet rs = preparedStatement.executeQuery();
+        	
+	        	if(rs.next()){
+	        		if(!grades.get(i).equals(Integer.valueOf(rs.getInt("grade")))){
+	        			query = "UPDATE grade SET grade= ? WHERE studentId= ? AND subjectCode= ? AND quarter = ?";
+		        		preparedStatement = connection.prepareStatement(query);
+		        		preparedStatement.setInt(1, grades.get(i));
+		        		preparedStatement.setString(2, studentId);
+		        		preparedStatement.setString(3, subjectCode);
+		        		preparedStatement.setString(4, quarters.get(i));
+		        		preparedStatement.executeUpdate();
+	        		}
+	        		
+	        	} else {
+	        		query = "INSERT INTO grade (grade, quarter, subjectCode, studentId) VALUE (?,?,?,?)";
+	        		preparedStatement = connection.prepareStatement(query);
+	        		preparedStatement.setInt(1, grades.get(i) == null ? -1: grades.get(i));
+	        		preparedStatement.setString(2, quarters.get(i));
+	        		preparedStatement.setString(3, subjectCode);
+	        		preparedStatement.setString(4, studentId);
+	        		preparedStatement.executeUpdate();
+	        	}
+        	}
+        	
+        	closeAll();
+         	 
+  		} catch (SQLException e) {
+  			e.printStackTrace();
+  		}
 	}
     
     
