@@ -54,22 +54,22 @@ public class ShowStudentGrades extends HttpServlet {
 			
 			studentListString += "<tr id=" + studentId + ">";
 			studentListString += "<td>" + studentName + "</td>";
-			if(firstQG == null || firstQG == -1)
+			if(firstQG == -1)
 				studentListString += "<td><input type='text' name='firstQG' class='gradeText' value='' disabled/></td>";
 			else
 				studentListString += "<td><input type='text' name='firstQG' class='gradeText' value='" + firstQG + "' disabled/></td>";
 			
-			if(secondQG == null || secondQG == -1)
+			if(secondQG == -1)
 				studentListString += "<td><input type='text' name='secondQG' class='gradeText' value='' disabled/></td>";
 			else
 				studentListString += "<td><input type='text' name='secondQG' class='gradeText' value='" + secondQG + "' disabled/></td>";
 			
-			if(thirdQG == null || thirdQG == -1)
+			if(thirdQG == -1)
 				studentListString += "<td><input type='text' name='thirdQG' class='gradeText' value='' disabled/></td>";
 			else
 				studentListString += "<td><input type='text' name='thirdQG' class='gradeText' value='" + thirdQG + "' disabled/></td>";
 			
-			if(fourthQG == null || fourthQG == -1)
+			if(fourthQG == -1)
 				studentListString += "<td><input type='text' name='fourthQG' class='gradeText' value='' disabled/></td>";
 			else
 				studentListString += "<td><input type='text' name='fourthQG' class='gradeText' value='" + fourthQG + "' disabled/></td>";
