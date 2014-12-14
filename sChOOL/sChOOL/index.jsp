@@ -61,33 +61,6 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Login Page</h4>
-      </div>
-        <form name="loginModal" action="SignUp" method="post">
-      <div class="modal-body">
-           
-        <div class="container">
-                <p>Username: <input id="userId" type="text" name="userId" maxlength="30"></p>
-                <p>New Password: <input id="newPassword" type="password" name="newPassword" maxlength="30"></p>
-                <p>Confirm Password: <input id="confirmPassword" type="password" name="confirmPassword" maxlength="30"></p>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-           <input type="submit" class="btn btn-primary" value="Sign Up >>">
-      </div>
-        </form>
-    </div>
-  </div>
-</div>
-
-
     <div class="navbar navbar-inverse">
         <div class="container">
 
@@ -95,9 +68,6 @@
                 <li>
                 	<button class="btn btn-primary" data-toggle="modal"  data-target="#loginModal" aria-pressed="false" autocomplete="off">
                     Login</button>
-                </li>
-                <li><button class="btn btn-primary" data-toggle="modal"  data-target="#signupModal" aria-pressed="false" autocomplete="off">
-                	Sign Up</button>
                 </li>
           	</ul>
   <h3>St. Michael's Learning Center</h3>
