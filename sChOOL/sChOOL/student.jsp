@@ -55,6 +55,7 @@
 			});
 			
 			function showClearance(){
+				$('#bodyPane').html("Please wait...");
 				var param = {
 					studentId: $("#studentId").val()
 				};
@@ -70,6 +71,7 @@
 			}
 			
 			function showGrades(){
+				$('#bodyPane').html("Please wait...");
 				var param = {
 					studentId: $("#studentId").val()
 				};
