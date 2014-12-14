@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Servlet.authentication;
 
 import Beans.UserBean;
 import DAO.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -22,8 +21,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Operio
  */
-@WebServlet(name = "UserLogin", urlPatterns = {"/UserLogin"})
-public class UserLogin extends HttpServlet {
+@WebServlet(name = "LogOut", urlPatterns = {"/LogOut"})
+public class LogOut extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,53 +36,16 @@ public class UserLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-            
-        	String userId = request.getParameter("userId");
-        	String password = request.getParameter("password");
-        	
-            UserDAO userDAO = new UserDAO();
-            UserBean user = userDAO.FindUser(userId,password);
-            
-            if(user == null){
-            	PrintWriter out = response.getWriter();
-            	out.println("<script>");
-                out.println("alert(\"INVALID ACCESS!\");");
-                out.println("window.location=\"index.jsp\";");
-                out.println("</script>");
-                
-            } else {
-            	HttpSession session = request.getSession(true);
-                if(user.getProfession().equals("student")){
-                	session.setAttribute("studentSessionUser",user);
-	                session.setMaxInactiveInterval(15*60);
-	                
-	                Cookie userID = new Cookie("studentSessionUser",user.getUserId());
-	                userID.setMaxAge(15*60);
-	                response.addCookie(userID);
-	                response.sendRedirect("StudentPage");
-	                
-	             } else if(user.getProfession().equals("faculty")){
-	                session.setAttribute("facultySessionUser",user);
-	                session.setMaxInactiveInterval(15*60);
-	                
-	                Cookie userID = new Cookie("facultySessionUser",user.getUserId());
-	                userID.setMaxAge(15*60);
-	                response.addCookie(userID);
-	                response.sendRedirect("FacultyPage");
-	   
-	            } else { //admin access
-	                session.setAttribute("adminSessionUser",user);
-	                session.setMaxInactiveInterval(15*60);
-	                
-	                Cookie userID = new Cookie("adminSessionUser",user.getUserId());
-	                userID.setMaxAge(15*60);
-	                response.addCookie(userID);
-	                response.sendRedirect("AdminPage");
-	   
-	            }
-                
+        
+            HttpSession session = request.getSession(false);
+            if(session!=null)
+            {
+                session.invalidate();
+                response.sendRedirect("index.jsp");
             }
+        
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -96,7 +58,7 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	
+        processRequest(request, response);
     }
 
     /**
@@ -110,7 +72,6 @@ public class UserLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
