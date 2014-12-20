@@ -50,8 +50,49 @@
 		$(document).ready(function(){
 			$('#addId').click(assignNewUser);
 			$('#assignFaculty').click();
+			$('#editClearance').click(showStudentClearance);
 			$('#editAnnouncement').click(showAnnouncement);
 		});
+		
+		function showStudentClearance(){
+			$('#bodyPane').html("please wait...");
+			$.ajax({
+				type : "get",
+				url : "ShowStudentClearance",
+				success : function(result){
+					$('#bodyPane').html(result);
+				}
+			});
+		}
+		
+		var clearanceToggle = 0;
+		function editClearance(clearanceId){
+			if(clearanceToggle == 1){
+				clearanceToggle = 0;
+				element.getElementsByTagName("textArea").item(0).disabled = true;
+				element.getElementsByTagName("input").item(0).value = "Edit";
+				
+				if(confirm("Are you sure on announcement change?")){
+					var param = {
+						announcementId : announcementId,
+						message: element.getElementsByTagName("textArea").item(0).value
+					};
+					
+					$.ajax({
+						type : "get",
+						data: param,
+						url : "EditAnnouncement",
+						success : function(){
+							showAnnouncement();
+							alert("Saved");
+						}
+					});
+				}
+			} else {
+				clearanceToggle = 1;
+				
+			}
+		}
 		
 		function assignNewUser(){
 			$.ajax({
@@ -206,7 +247,8 @@
     <div id="sidePane">
     	<input class="btn btn-success" type="button" id="addId" value="Add ID"/><br><br>
 		<input class="btn btn-success" type="button" id="assignFaculty" value="Assign Faculty"/><br><br>
-		<input class="btn btn-success" type="button" id="editAnnouncement" value="Edit Announcement"/>
+		<input class="btn btn-success" type="button" id="editClearance" value="Student Clearances"/><br><br>
+		<input class="btn btn-success" type="button" id="editAnnouncement" value="Announcements"/>
     </div>
     
     <div id="bodyPane">

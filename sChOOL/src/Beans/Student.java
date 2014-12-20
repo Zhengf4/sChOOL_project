@@ -7,14 +7,24 @@ public class Student {
 	private String studentId;
 	private String name;
 	private ArrayList<Subject> subjectList;
+	private ArrayList<Clearance> clearanceList;
 	
 	public Student() {}
 	
-	public Student(String studentId, String name, ArrayList<Subject> subjectList) {
+	public ArrayList<Clearance> getClearanceList() {
+		return clearanceList;
+	}
+
+	public void setClearanceList(ArrayList<Clearance> clearanceList) {
+		this.clearanceList = clearanceList;
+	}
+
+	public Student(String studentId, String name, ArrayList<Subject> subjectList, ArrayList<Clearance> clearanceList) {
 		super();
 		this.studentId = studentId;
 		this.name = name;
 		this.subjectList = subjectList;
+		this.clearanceList = clearanceList;
 	}
 	
 	public ArrayList<Subject> getSubjectList() {

@@ -407,7 +407,7 @@ public class UserDAO {
         ArrayList<Clearance> clearanceList = new ArrayList<Clearance>();
         
         try {
-        	String query = "SELECT studentId, description, dateIssued, dateResolved FROM clearance "
+        	String query = "SELECT clearanceId, studentId, description, dateIssued, dateResolved FROM clearance "
             				+ "INNER JOIN user on studentId = userId "
             				+ "WHERE userId = ?";
         	
@@ -417,6 +417,7 @@ public class UserDAO {
 			
 			while(rs.next()){
 				Clearance newClearance = new Clearance();
+				newClearance.setClearanceId(rs.getString("clearanceId"));
 				newClearance.setClearance(rs.getString("description"));
 				newClearance.setDateTimeIssued(new DateTime(rs.getTimestamp("dateIssued").getTime()));
 				newClearance.setDateTimeResolved(rs.getTimestamp("dateResolved") == null ? null : new DateTime(rs.getTimestamp("dateResolved")));
@@ -572,6 +573,38 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public ArrayList<Student> getStudentAccounts() {
+		ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
+        connection = connectionFactory.getConnection();
+        
+        try {
+        	String query = "SELECT userId, name, description, dateIssued, dateResolved FROM user "
+            		+ "INNER JOIN clearance on userId=studentId "
+            		+ "WHERE profession='student'";
+            
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();
+			ArrayList<Student> studentList = new ArrayList<Student>();
+			
+			while(rs.next()){
+				ArrayList<Clearance> clearanceList = this.FetchStudentClearance(rs.getString("userId"));
+				
+				Student newStudent = new Student();
+				newStudent.setStudentId(rs.getString("userId"));
+				newStudent.setName(rs.getString("name"));
+				newStudent.setClearanceList(clearanceList);
+				studentList.add(newStudent);
+			}
+
+			closeAll();
+			return studentList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+		return null;
 	}
     
     
